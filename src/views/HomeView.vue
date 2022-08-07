@@ -1,7 +1,5 @@
 <template>
-  <div v-if="!isLoaded">show it</div>
-  <div @click="increment()">click</div>
-  <div class="users" v-if="isLoaded">
+  <div class="users" v-if="!loading.loading">
     <div class="user" v-for="user in userInfo" :key="user.id">
       <UserCards
         :userName="user.username"
@@ -12,11 +10,12 @@
       />
     </div>
   </div>
+  <h1 v-if="loading.loading">Loading...</h1>
 </template>
 
 <script>
-import { useCounterStore } from "@/stores/counter";
-import { ref, onBeforeMount, onMounted } from "vue";
+import { useLoadingStore } from "@/stores/loading";
+import { ref } from "vue";
 // @ is an alias to /src
 import UserCards from "@/components/UserCards.vue";
 
@@ -36,10 +35,9 @@ export default {
   //   console.log(this.isLoaded);
   // },
   setup() {
-    const counter = useCounterStore();
+    const loading = useLoadingStore();
 
     const userInfo = ref([]);
-    const isLoaded = ref(false);
     // onMounted(() => {
     fetch(`http://localhost:3000/users`)
       .then((response) => response.json())
@@ -58,7 +56,7 @@ export default {
             .then((data) => {
               userInfo.value = data[0].data;
               console.log(userInfo.value);
-              isLoaded.value = true;
+              loading.isLoading();
             });
         }
       });
@@ -72,15 +70,11 @@ export default {
         },
       });
       userInfo.value = data;
-      isLoaded.value = true;
+      loading.isLoading();
     };
     // });
 
-    function increment() {
-      counter.increment();
-    }
-
-    return { userInfo, isLoaded, counter, increment };
+    return { userInfo, loading };
   },
 };
 </script>

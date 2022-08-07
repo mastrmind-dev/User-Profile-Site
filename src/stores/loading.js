@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia'
 
-export const useCounterStore = defineStore('counter', {
+export const useLoadingStore = defineStore('loading', {
   state: () => {
-    return { count: 0 }
+    return { loading: true }
   },
   // could also be defined as
   // state: () => ({ count: 0 })
   actions: {
-    increment() {
-      this.count++
+    isLoading() {
+      this.loading = false;
     },
   },
 })

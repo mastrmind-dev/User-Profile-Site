@@ -1,19 +1,18 @@
 <template>
-  <nav>
+  <nav v-if="!loading.loading">
     <router-link to="/">User Cards</router-link>
-    {{counter.count}}
   </nav>
   <router-view />
 </template>
 
 <script>
-import { useCounterStore } from "@/stores/counter";
+import { useLoadingStore } from "@/stores/loading";
 
 export default {
   setup() {
-    const counter = useCounterStore();
+    const loading = useLoadingStore();
 
-    return{counter}
+    return{loading}
   },
 };
 </script>
