@@ -1,5 +1,7 @@
 <template>
-  <div class="users">
+  <div v-if="!isLoaded">show it</div>
+  <div @click="increment()">click</div>
+  <div class="users" v-if="isLoaded">
     <div class="user" v-for="user in userInfo" :key="user.id">
       <UserCards
         :userName="user.username"
@@ -13,7 +15,8 @@
 </template>
 
 <script>
-import { ref, onBeforeMount } from "vue";
+import { useCounterStore } from "@/stores/counter";
+import { ref, onBeforeMount, onMounted } from "vue";
 // @ is an alias to /src
 import UserCards from "@/components/UserCards.vue";
 
@@ -22,31 +25,43 @@ export default {
   components: {
     UserCards,
   },
+  // data() {
+  //   return {
+  //     isLoaded: false,
+  //   };
+  // },
+  // mounted() {
+  //   console.log("exec");
+  //   this.isLoaded = true;
+  //   console.log(this.isLoaded);
+  // },
   setup() {
-    const userInfo = ref([]);
+    const counter = useCounterStore();
 
-    onBeforeMount(() => {
-      fetch(`http://localhost:3000/users`)
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          if (data.length === 0) {
-            fetch(`https://jsonplaceholder.typicode.com/users`)
-              .then((response) => response.json())
-              .then((data) => {
-                console.log(data);
-                addInitialData(data);
-              });
-          } else {
-            fetch(`http://localhost:3000/users`)
-              .then((response) => response.json())
-              .then((data) => {
-                userInfo.value = data[0].data;
-                console.log(userInfo.value);
-              });
-          }
-        });
-    });
+    const userInfo = ref([]);
+    const isLoaded = ref(false);
+    // onMounted(() => {
+    fetch(`http://localhost:3000/users`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.length == 0) {
+          fetch(`https://jsonplaceholder.typicode.com/users`)
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              addInitialData(data);
+            });
+        } else {
+          fetch(`http://localhost:3000/users`)
+            .then((response) => response.json())
+            .then((data) => {
+              userInfo.value = data[0].data;
+              console.log(userInfo.value);
+              isLoaded.value = true;
+            });
+        }
+      });
 
     const addInitialData = (data) => {
       fetch(`http://localhost:3000/users`, {
@@ -57,9 +72,15 @@ export default {
         },
       });
       userInfo.value = data;
+      isLoaded.value = true;
     };
+    // });
 
-    return { userInfo };
+    function increment() {
+      counter.increment();
+    }
+
+    return { userInfo, isLoaded, counter, increment };
   },
 };
 </script>

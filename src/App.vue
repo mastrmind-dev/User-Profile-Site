@@ -1,9 +1,22 @@
 <template>
   <nav>
     <router-link to="/">User Cards</router-link>
+    {{counter.count}}
   </nav>
   <router-view />
 </template>
+
+<script>
+import { useCounterStore } from "@/stores/counter";
+
+export default {
+  setup() {
+    const counter = useCounterStore();
+
+    return{counter}
+  },
+};
+</script>
 
 <style lang="scss">
 #app {
