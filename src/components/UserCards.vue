@@ -7,8 +7,7 @@
     />
     <div class="user-details">
       <div class="name">
-        <!-- <EMail style="width: 1rem; color: red" />{{ name }}
-        <Phone style="width: 1rem; color: red" />{{ name }} -->
+        {{name}}
       </div>
       <div class="email"><fa icon="fa-solid fa-envelope" /> {{ email }}</div>
       <div class="phone"><fa icon="fa-solid fa-phone" /> {{ phone }}</div>
@@ -45,6 +44,7 @@ export default {
     text-align: left;
     .name {
       font-weight: bolder;
+      text-align: center;
     }
   }
 }

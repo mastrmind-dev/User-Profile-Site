@@ -42,7 +42,7 @@ export default {
     fetch(`http://localhost:3000/users`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        console.log(data.length);
         if (data.length == 0) {
           fetch(`https://jsonplaceholder.typicode.com/users`)
             .then((response) => response.json())
@@ -54,7 +54,8 @@ export default {
           fetch(`http://localhost:3000/users`)
             .then((response) => response.json())
             .then((data) => {
-              userInfo.value = data[0].data;
+              console.log(data)
+              userInfo.value = data;
               console.log(userInfo.value);
               loading.isLoading();
             });
@@ -62,13 +63,16 @@ export default {
       });
 
     const addInitialData = (data) => {
-      fetch(`http://localhost:3000/users`, {
+      console.log(data);
+      data.map((d)=>{
+        fetch(`http://localhost:3000/users`, {
         method: "POST",
-        body: JSON.stringify({ data }),
+        body: JSON.stringify(d),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
       });
+      })
       userInfo.value = data;
       loading.isLoading();
     };
